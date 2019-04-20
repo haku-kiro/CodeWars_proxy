@@ -13,6 +13,10 @@ router.get('/', cors(), (req, res) => {
 });
 router.get('/another', (req, res) => res.json({ route: req.originalUrl }));
 
+router.get('/thing', cors(), (req, res, next) => {
+  res.send({ name: 'Michael', surname: 'Da Costa' });
+});
+
 app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router); // path must route to lambda
 
