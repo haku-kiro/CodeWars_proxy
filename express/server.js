@@ -18,11 +18,43 @@ router.get('/thing', cors(), (req, res, next) => {
   res.send({ name: 'Michael', surname: 'Da Costa' });
 });
 
-router.get('/codewars', cors(), (req, res, next) => {
+// Call to get the user details
+router.get('/codewars/user/:username', cors(), (req, res, next) => {
   var that = res;
+  let user = req.params.username;
 
   axios
-    .get('https://www.codewars.com/api/v1/users/haku_kiro')
+    .get('https://www.codewars.com/api/v1/users/' + user)
+    .then(response => {
+      that.send(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+});
+
+// Call to get the users completed katas
+router.get('/codewars/katas/:username', cors(), (req, res, next) => {
+  var that = res;
+  let user = req.params.username;
+
+  axios
+    .get('https://www.codewars.com/api/v1/users/' + user + '/code-challenges/completed?page=0')
+    .then(response => {
+      that.send(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+});
+
+// Call to get a single katas details using the slug
+router.get('/codewars/katas/kata/:slug', cors(), (req, res, next) => {
+  var that = res;
+  let kataSlug = req.params.slug;
+
+  axios
+    .get('https://www.codewars.com/api/v1/code-challenges/' + kataSlug)
     .then(response => {
       that.send(response.data);
     })
